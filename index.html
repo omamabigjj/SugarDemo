@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
+<html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>跳躍遊戲</title>
+    <title>亞東科技大學</title>
     <link rel="shortcut icon" href="TemplateData/logo.png">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var unityInstance = UnityLoader.instantiate("unityContainer", "Build/web.json", {onProgress: UnityProgress});
+    </script>
+  </head>
+  <body>
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 960px; height: 600px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <div class="title">亞東科技大學資管系</div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+=======================
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Blood Sugar Controller</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
-     <body bgcolor="lightblue">
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600></canvas>
-   
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-    
-       
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Blood Sugar Controller</div>
       </div>
     </div>
     <script>
@@ -53,13 +88,13 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/webgl.loader.js";
       var config = {
-        dataUrl: buildUrl + "/webgl.data",
-        frameworkUrl: buildUrl + "/webgl.framework.js",
-        codeUrl: buildUrl + "/webgl.wasm",
+        dataUrl: buildUrl + "/webgl.data.unityweb",
+        frameworkUrl: buildUrl + "/webgl.framework.js.unityweb",
+        codeUrl: buildUrl + "/webgl.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "S",
-        productVersion: "1.0",
+        productName: "Blood Sugar Controller",
+        productVersion: "0.1",
         showBanner: unityShowBanner,
       };
 
@@ -71,15 +106,29 @@
       // config.matchWebGLToCanvasSize = false;
 
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
         container.className = "unity-mobile";
-        // Avoid draining fillrate performance on mobile devices,
-        // and default/override low DPI mode on mobile browsers.
-        config.devicePixelRatio = 1;
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+
         unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+
         canvas.style.width = "960px";
         canvas.style.height = "600px";
       }
+
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
@@ -98,3 +147,5 @@
       };
       document.body.appendChild(script);
     </script>
+  </body>
+</html>
